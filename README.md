@@ -1,32 +1,4 @@
 
-
-
-
-
- ab is structure k according dataset daina 
-
-find error
-
-
-
- yeh to galat arahi h 
-
- isay eqval
-
-
-
-
-
-f7c001e6-7a4e-4d3c-b506-02ffea7bf418.png
- aisay to traiing and testing imbalance horahi h prediction to sirf  1 ati rahay gi her input m 
-
-7e7df61a-670d-40a7-a4d8-bf7d3f6bc8b5.png
-
-9941babe-5c68-4538-b3c7-f56cec36b696.png
- error arah h 
-
-Ye ek professional GitHub README.md hai jo tumhare ANN Wine Quality Prediction project ke liye suitable hai.
-
 # 🍷 ANN-Based White Wine Quality Prediction
 
 ## 📌 Project Overview
