@@ -1,0 +1,13 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+nltk
+joblib
+wordcloud
+regex
+openpyxl
+tensorflow
+transformers
+datasets
