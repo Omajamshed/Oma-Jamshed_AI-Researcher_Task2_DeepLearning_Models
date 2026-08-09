@@ -161,85 +161,156 @@ The model uses a Simple RNN followed by Dense layers.
 
 # 🔄 Project Flow Diagram
 
-```text
-START
-  │
-  ▼
-Load Dataset
-  │
-  ▼
-Clean Data
-  │
-  ▼
-Normalize Values
-  │
-  ▼
-Create 12-Month Sequences
-  │
-  ▼
-Train/Test Split
-  │
-  ▼
-Build RNN
-  │
-  ▼
-Train Model
-  │
-  ▼
-Save Model
-  │
-  ▼
-Generate Predictions
-  │
-  ▼
-Evaluate MAE & RMSE
-  │
-  ▼
-Create Graphs
-  │
-  ▼
-END
-```
-
----
+┌──────────────────────────────┐
+│            START             │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│      Load Dataset            │
+│    AirPassengers.csv         │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│     Data Preprocessing       │
+│   Cleaning & Preparation     │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Data Scaling           │
+│   Normalize Input Values     │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│    Sequence Generation       │
+│  Create Input-Output Pairs   │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│      Train/Test Split        │
+│   Training & Testing Data    │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Build RNN Model        │
+│   RNN + Dense + Output       │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Train RNN Model        │
+│   Learn Temporal Patterns    │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Save Trained Model     │
+│      rnn_model.keras         │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Model Evaluation       │
+│       MAE & Performance      │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Generate Prediction    │
+│    Actual vs Predicted       │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│      Generate Outputs        │
+│ Loss • MAE • Prediction      │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│             END              │
+└──────────────────────────────┘
 
 # 🔁 State Diagram
 
-```text
-[Start]
-   │
-   ▼
-Initialization
-   │
-   ▼
-Data Loading
-   │
-   ▼
-Preprocessing
-   │
-   ▼
-Sequence Creation
-   │
-   ▼
-Model Building
-   │
-   ▼
-Training
-   │
-   ▼
-Prediction
-   │
-   ▼
-Evaluation
-   │
-   ▼
-Visualization
-   │
-   ▼
-[Completed]
-```
-
----
+┌──────────────────────────────┐
+│          Input t₁            │
+│       Passenger Value        │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│          RNN Cell            │
+│     Process Input t₁         │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│       Hidden State h₁        │
+│     Previous Information     │
+└──────────────┬───────────────┘
+               │
+               │
+               └──────────────────────┐
+                                      │
+                                      ▼
+                         ┌──────────────────────────────┐
+                         │          Input t₂            │
+                         │       Passenger Value        │
+                         └──────────────┬───────────────┘
+                                        │
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │          RNN Cell            │
+                         │   Input t₂ + Hidden State h₁│
+                         └──────────────┬───────────────┘
+                                        │
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │       Hidden State h₂        │
+                         │   Updated Information        │
+                         └──────────────┬───────────────┘
+                                        │
+                                        │
+                                        └─────────────────────┐
+                                                              │
+                                                              ▼
+                                                 ┌──────────────────────┐
+                                                 │       Input t₃        │
+                                                 │    Passenger Value   │
+                                                 └──────────┬───────────┘
+                                                            │
+                                                            ▼
+                                                 ┌──────────────────────┐
+                                                 │       RNN Cell        │
+                                                 │ Input t₃ + State h₂   │
+                                                 └──────────┬───────────┘
+                                                            │
+                                                            ▼
+                                                 ┌──────────────────────┐
+                                                 │    Hidden State h₃   │
+                                                 │ Updated Information  │
+                                                 └──────────┬───────────┘
+                                                            │
+                                                            ▼
+                                                          ...
+                                                            │
+                                                            ▼
+                                                 ┌──────────────────────┐
+                                                 │    Final Hidden State│
+                                                 │          hₜ          │
+                                                 └──────────┬───────────┘
+                                                            │
+                                                            ▼
+                                                 ┌──────────────────────┐
+                                                 │      Output Layer    │
+                                                 │ Passenger Prediction │
+                                                 └──────────────────────┘
 
 # 🧹 Data Preprocessing
 
