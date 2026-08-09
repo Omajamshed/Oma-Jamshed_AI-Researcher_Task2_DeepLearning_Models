@@ -1,170 +1,610 @@
-
 # 🔄 RNN Air Passenger Forecasting
 
-A Deep Learning project that uses a **Recurrent Neural Network (RNN)** to forecast monthly airline passenger numbers using the **AirPassengers dataset**.
+A complete Deep Learning project implementing a **Recurrent Neural Network (RNN)** for time-series forecasting using the **AirPassengers dataset**.
 
 ---
 
-## 📌 Project Overview
+# 📑 Table of Contents
 
-This project implements a **Simple Recurrent Neural Network (RNN)** for time-series forecasting.
-
-The model learns patterns from historical airline passenger data and uses the previous **12 months** of passenger information to predict the passenger count for the next month.
-
-### Project Objectives
-
-- Understand Recurrent Neural Networks
-- Work with sequential time-series data
-- Preprocess and scale the dataset
-- Create time-series sequences
-- Train an RNN model
-- Evaluate forecasting performance
-- Generate future predictions
-- Visualize actual vs predicted values
-- Save the trained Keras model
+1. Project Overview
+2. Objectives
+3. What is RNN?
+4. Dataset
+5. RNN Architecture
+6. Architecture Diagram
+7. Flow Diagram
+8. State Diagram
+9. Data Preprocessing
+10. Model Details
+11. Training Process
+12. Evaluation
+13. Outputs
+14. Folder Structure
+15. Installation
+16. How to Run
+17. Technologies
+18. Future Improvements
+19. Author
 
 ---
 
-# 🧠 RNN Architecture
+# 📌 Project Overview
 
-The RNN architecture used in this project is:
+This project predicts future airline passenger numbers using historical monthly passenger data. A **Simple RNN** learns sequential patterns from the previous 12 months and forecasts the next month's passenger count.
+
+### 🎯 Objectives
+
+* Implement an RNN for time-series forecasting.
+* Learn sequential pattern recognition.
+* Normalize and preprocess data.
+* Generate future passenger predictions.
+* Evaluate model performance using MAE & RMSE.
+* Save the trained model and visualizations.
+
+---
+
+# 🧠 What is RNN?
+
+A **Recurrent Neural Network (RNN)** is designed for sequential data. Unlike traditional neural networks, it remembers previous information through a **hidden state**, making it ideal for time-series forecasting.
+
+### RNN Working Principle
 
 ```text
-              Input Sequence
-             Previous 12 Months
-                    │
-                    ▼
-        ┌──────────────────────┐
-        │      SimpleRNN       │
-        │      64 Units        │
-        │   tanh Activation    │
-        └──────────────────────┘
-                    │
-                    ▼
-        ┌──────────────────────┐
-        │       Dropout        │
-        │        20%           │
-        └──────────────────────┘
-                    │
-                    ▼
-        ┌──────────────────────┐
-        │     Dense Layer      │
-        │      32 Units        │
-        │   ReLU Activation    │
-        └──────────────────────┘
-                    │
-                    ▼
-        ┌──────────────────────┐
-        │     Output Layer     │
-        │        1 Unit        │
-        └──────────────────────┘
-                    │
-                    ▼
-          Passenger Prediction
+Month 1 ──►
+Month 2 ──►
+Month 3 ──►  RNN Hidden State ──► Prediction
+...
+Month 12 ─►
+```
 
+The hidden state carries information from previous months to predict the next value.
 
+---
 
-Architecture Explanation
+# 📊 Dataset
 
-1. Input Sequence
+**Dataset:** AirPassengers
 
-The model receives the previous 12 months of passenger data.
+| Property     | Value           |
+| ------------ | --------------- |
+| Dataset Type | Time Series     |
+| Frequency    | Monthly         |
+| Target       | Passenger Count |
+| Input Window | 12 Months       |
+| Forecast     | Next Month      |
 
-2. SimpleRNN
+### Example
 
-The SimpleRNN layer contains 64 units and learns temporal patterns from the input sequence.
+```text
+Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+                     │
+                     ▼
+              Predict January (Next Year)
+```
 
-3. Dropout
+---
 
-A dropout rate of 20% is used to reduce overfitting.
+# 🏗️ RNN Architecture
 
-4. Dense Layer
+The model uses a Simple RNN followed by Dense layers.
 
-A fully connected layer with 32 neurons processes the learned representation.
+```text
+            Input Sequence
+        (Previous 12 Months)
+                  │
+                  ▼
+        ┌───────────────────┐
+        │    SimpleRNN      │
+        │     64 Units      │
+        │      tanh         │
+        └───────────────────┘
+                  │
+                  ▼
+        ┌───────────────────┐
+        │     Dropout       │
+        │       20%         │
+        └───────────────────┘
+                  │
+                  ▼
+        ┌───────────────────┐
+        │   Dense Layer     │
+        │     32 Units      │
+        │       ReLU        │
+        └───────────────────┘
+                  │
+                  ▼
+        ┌───────────────────┐
+        │   Output Layer    │
+        │      1 Unit       │
+        └───────────────────┘
+                  │
+                  ▼
+         Passenger Prediction
+```
 
-5. Output Layer
+---
 
-The final layer contains 1 neuron because the model predicts one passenger value for the next time step.
+# 🏛️ System Architecture Diagram
 
+```text
+┌──────────────────────┐
+│ AirPassengers Dataset│
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Data Preprocessing   │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Sequence Generation  │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│     RNN Model        │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Model Evaluation     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Passenger Forecast   │
+└──────────────────────┘
+```
 
-🔄 Flow Diagram
+---
 
-The complete workflow of the project is shown below:
-flowchart TD
+# 🔄 Project Flow Diagram
 
-    A([Start]) --> B[Load AirPassengers Dataset]
+```text
+START
+  │
+  ▼
+Load Dataset
+  │
+  ▼
+Clean Data
+  │
+  ▼
+Normalize Values
+  │
+  ▼
+Create 12-Month Sequences
+  │
+  ▼
+Train/Test Split
+  │
+  ▼
+Build RNN
+  │
+  ▼
+Train Model
+  │
+  ▼
+Save Model
+  │
+  ▼
+Generate Predictions
+  │
+  ▼
+Evaluate MAE & RMSE
+  │
+  ▼
+Create Graphs
+  │
+  ▼
+END
+```
 
-    B --> C[Data Cleaning]
+---
 
-    C --> D[Select Passenger Column]
+# 🔁 State Diagram
 
-    D --> E[Min-Max Scaling]
+```text
+[Start]
+   │
+   ▼
+Initialization
+   │
+   ▼
+Data Loading
+   │
+   ▼
+Preprocessing
+   │
+   ▼
+Sequence Creation
+   │
+   ▼
+Model Building
+   │
+   ▼
+Training
+   │
+   ▼
+Prediction
+   │
+   ▼
+Evaluation
+   │
+   ▼
+Visualization
+   │
+   ▼
+[Completed]
+```
 
-    E --> F[Create 12-Month Sequences]
+---
 
-    F --> G[Train/Test Split]
+# 🧹 Data Preprocessing
 
-    G --> H[Build RNN Model]
+The dataset is prepared before training.
 
-    H --> I[Train RNN]
+### Steps
 
-    I --> J[Save Training Loss]
+1. Load AirPassengers dataset
+2. Select passenger column
+3. Remove missing values
+4. Apply Min-Max Scaling
+5. Create 12-month sequences
+6. Split into training and testing data
 
-    I --> K[Save Training MAE]
+### Preprocessing Pipeline
 
-    I --> L[Save Trained Model]
+```text
+Raw Data
+   │
+   ▼
+Cleaning
+   │
+   ▼
+Scaling
+   │
+   ▼
+Sequence Creation
+   │
+   ▼
+Train/Test Split
+```
 
-    I --> M[Generate Predictions]
+---
 
-    M --> N[Inverse Scaling]
+# 🔢 Sequence Creation
 
-    N --> O[Calculate MAE]
+The model uses **12 previous months** to predict the next month.
 
-    N --> P[Calculate RMSE]
+```text
+Input:
+Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
-    O --> Q[Actual vs Predicted Graph]
+Output:
+Next Month Passenger Count
+```
 
-    P --> Q
+Sliding window example:
 
-    Q --> R[Save Prediction Graph]
+```text
+Months 1–12 → Predict Month 13
+Months 2–13 → Predict Month 14
+Months 3–14 → Predict Month 15
+```
 
-    R --> S([Project Completed])
+---
 
-🔁 State Diagram
+# ⚙️ Model Details
 
-The system moves through different states during execution.
+| Parameter   | Value              |
+| ----------- | ------------------ |
+| Model       | SimpleRNN          |
+| RNN Units   | 64                 |
+| Dense Units | 32                 |
+| Activation  | tanh + ReLU        |
+| Optimizer   | Adam               |
+| Loss        | Mean Squared Error |
+| Metric      | MAE                |
+| Epochs      | 50                 |
+| Batch Size  | 16                 |
 
-stateDiagram-v2
+---
 
-    [*] --> Initialization
+# 🏋️ Model Training
 
-    Initialization --> DataLoading
+During training, the model learns temporal relationships between historical passenger values.
 
-    DataLoading --> DataValidation
+### Training Pipeline
 
-    DataValidation --> ErrorState: Dataset Missing
+```text
+Training Data
+      │
+      ▼
+Forward Pass
+      │
+      ▼
+Loss Calculation
+      │
+      ▼
+Backpropagation
+      │
+      ▼
+Weight Update
+      │
+      ▼
+Repeat for 50 Epochs
+```
 
-    ErrorState --> [*]
+---
 
-    DataValidation --> Preprocessing: Dataset Valid
+# 📏 Model Evaluation
 
-    Preprocessing --> SequenceCreation
+The trained model is evaluated using regression metrics.
 
-    SequenceCreation --> TrainTestSplit
+## MAE
 
-    TrainTestSplit --> ModelBuilding
+Average absolute prediction error.
 
-    ModelBuilding --> Training
+```text
+Lower MAE = Better Prediction
+```
 
-    Training --> ModelSaving
+## RMSE
 
-    ModelSaving --> Prediction
+Square root of average squared prediction error.
 
-    Prediction --> Evaluation
+```text
+Lower RMSE = Higher Forecast Accuracy
+```
 
-    Evaluation --> Visualization
+---
 
-    Visualization --> Completed
+# 🔮 Prediction Workflow
 
-    Completed --> [*]
+```text
+Test Sequence
+      │
+      ▼
+Trained RNN
+      │
+      ▼
+Scaled Prediction
+      │
+      ▼
+Inverse Scaling
+      │
+      ▼
+Actual Passenger Value
+```
 
+---
+
+# 📈 Outputs
+
+The project automatically generates these files.
+
+```text
+Outputs/
+│
+├── loss.png
+├── mae.png
+├── rnn_prediction.png
+└── rnn_model.keras
+```
+
+### Output Description
+
+| File               | Purpose                    |
+| ------------------ | -------------------------- |
+| loss.png           | Training & Validation Loss |
+| mae.png            | Training MAE               |
+| rnn_prediction.png | Actual vs Predicted Graph  |
+| rnn_model.keras    | Trained Model              |
+
+---
+
+# 📁 Project Structure
+
+```text
+RNN_MODEL/
+│
+├── Data/
+│   └── AirPassengers.csv
+│
+├── Outputs/
+│   ├── loss.png
+│   ├── mae.png
+│   ├── rnn_model.keras
+│   └── rnn_prediction.png
+│
+├── RNN_MODEL.py
+├── RNN_Training.py
+├── RNN_Evaluation.py
+├── RNN_Main.py
+│
+└── README.md
+```
+
+---
+
+# 📂 File Description
+
+### RNN_MODEL.py
+
+* Builds the RNN architecture
+* Defines layers
+* Compiles the model
+
+### RNN_Training.py
+
+* Loads data
+* Preprocesses dataset
+* Trains the model
+* Saves loss and MAE graphs
+
+### RNN_Evaluation.py
+
+* Loads trained model
+* Predicts values
+* Calculates MAE & RMSE
+* Creates prediction graph
+
+### RNN_Main.py
+
+* Executes the complete project pipeline
+
+---
+
+# 🛠️ Technologies Used
+
+| Technology   | Purpose             |
+| ------------ | ------------------- |
+| Python       | Programming         |
+| TensorFlow   | Deep Learning       |
+| Keras        | Neural Networks     |
+| Pandas       | Data Processing     |
+| NumPy        | Numerical Computing |
+| Matplotlib   | Visualization       |
+| Scikit-learn | Scaling & Metrics   |
+
+---
+
+# 📦 Required Libraries
+
+```bash
+tensorflow
+keras
+numpy
+pandas
+matplotlib
+scikit-learn
+```
+
+Install them using:
+
+```bash
+pip install tensorflow numpy pandas matplotlib scikit-learn
+```
+
+---
+
+# 🚀 Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Omajamshed/Oma-Jamshed_AI-Researcher_Task2_DeepLearning_Models.git
+```
+
+### Open Project
+
+```bash
+cd RNN_MODEL
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# ▶️ How to Run
+
+Run the project using:
+
+```bash
+python RNN_Main.py
+```
+
+### Execution Pipeline
+
+```text
+Load Dataset
+      ↓
+Preprocess Data
+      ↓
+Create Sequences
+      ↓
+Train RNN
+      ↓
+Evaluate Model
+      ↓
+Generate Predictions
+      ↓
+Save Outputs
+```
+
+---
+
+# 🎓 Learning Outcomes
+
+After completing this project, you will understand:
+
+* Recurrent Neural Networks
+* Sequential Learning
+* Time-Series Forecasting
+* Sliding Window Technique
+* Data Normalization
+* Model Evaluation
+* Prediction Visualization
+* Deep Learning Project Structure
+
+---
+
+# ⚠️ Limitations
+
+* SimpleRNN struggles with long-term dependencies.
+* Only one-step forecasting is implemented.
+* Performance can improve with LSTM or GRU.
+
+---
+
+# 🚀 Future Improvements
+
+* Implement LSTM
+* Implement GRU
+* Compare RNN vs LSTM vs GRU
+* Multi-step forecasting
+* Hyperparameter tuning
+* Early stopping
+* Streamlit deployment
+* FastAPI prediction API
+
+---
+
+# 📌 Project Status
+
+| Component         | Status      |
+| ----------------- | ----------- |
+| Dataset           | ✅ Completed |
+| Preprocessing     | ✅ Completed |
+| Sequence Creation | ✅ Completed |
+| RNN Model         | ✅ Completed |
+| Training          | ✅ Completed |
+| Evaluation        | ✅ Completed |
+| Prediction        | ✅ Completed |
+| Visualizations    | ✅ Completed |
+| Saved Model       | ✅ Completed |
+| Documentation     | ✅ Completed |
+
+---
+
+# 📝 Conclusion
+
+This project demonstrates a complete implementation of **Recurrent Neural Networks for Time-Series Forecasting**. The AirPassengers dataset is transformed into sequential training samples, processed through a Simple RNN architecture, evaluated using MAE and RMSE, and visualized through prediction graphs. The project provides practical experience in Deep Learning, sequence modeling, and forecasting.
+
+---
+
+# 👩‍💻 Author
+
+**Oma Jamshed**
+
+AI & Deep Learning Researcher
+
+---
+
+⭐ *Part of the Deep Learning Models Repository*
