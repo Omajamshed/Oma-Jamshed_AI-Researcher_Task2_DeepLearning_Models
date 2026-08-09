@@ -160,6 +160,7 @@ The model uses a Simple RNN followed by Dense layers.
 ---
 
 # 🔄 Project Flow Diagram
+```text
 
 ┌──────────────────────────────┐
 │            START             │
@@ -236,8 +237,11 @@ The model uses a Simple RNN followed by Dense layers.
 │             END              │
 └──────────────────────────────┘
 
-# 🔁 State Diagram
+```
 
+---
+# 🔁 State Diagram
+```text
 ┌──────────────────────────────┐
 │          Input t₁            │
 │       Passenger Value        │
@@ -312,6 +316,9 @@ The model uses a Simple RNN followed by Dense layers.
                                                  │ Passenger Prediction │
                                                  └──────────────────────┘
 
+```
+
+---
 # 🧹 Data Preprocessing
 
 The dataset is prepared before training.
