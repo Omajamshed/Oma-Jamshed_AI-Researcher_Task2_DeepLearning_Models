@@ -1,4 +1,4 @@
-# 🧠 Deep Learning Models – Concise Comparison
+# 🧠 Deep Learning Models – Comparison
 
 ## 📌 Overview
 
